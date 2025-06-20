@@ -5,5 +5,4 @@
     await TEMP.start();
     await require('./Routes');
     await require('./Controllers/Socket/listener');
-    //updated / go
 })();
