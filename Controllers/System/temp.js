@@ -1,7 +1,7 @@
 const console = require('tracer').colorConsole();
 const {Settings} = require("Shared/Models/Settings.model");
 class Temp {
-    constructor() {//log patlı
+    constructor() {
         this.db = false;
         Temp.instance = this;
         this.que = {
