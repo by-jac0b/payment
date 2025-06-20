@@ -1,0 +1,33 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_KEY }}
+
+      - name: DEPLOYMENT
+        run: |
+          echo "Connecting to EC2 at: ${{ secrets.EC2_HOST }}"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd /home/ec2-user/payment
+          pm2 delete payment
+          sudo chown -R $(whoami) /home/ec2-user/payment
+          git stash
+          git pull -f
+          git stash pop
+          sudo npm install --unsafe-perm
+          cp -r ./static_modules/* ./node_modules/
+          npm start
+          EOF
