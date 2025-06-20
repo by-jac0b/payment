@@ -72,6 +72,8 @@
         }
     });
 
+
+
     app.use("/", router);
 
     // Error handler - artık IP kontrolü burada değil
